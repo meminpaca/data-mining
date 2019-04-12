@@ -17,3 +17,4 @@ heightWeight = data[['height','weight']]
 print(heightWeight)
 
 
+
