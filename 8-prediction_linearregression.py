@@ -3,37 +3,34 @@
 """
 Created on Thu Mar 15 04:18:20 2018
 
-@author: sadievrenseker
 """
 
-#1. kutuphaneler
+#1. Libraries
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-#2. Veri Onisleme
+#2. Data Pre-Processing
 
-#2.1. Veri Yukleme
-veriler = pd.read_csv('satislar.csv')
-#pd.read_csv("veriler.csv")
+#2.1. Data Loading
+data = pd.read_csv('data/sales_dataset.csv')
+
+#get only monht column
+months = data[["Month"]]
+
+#get only Sales column
+sales = data[["Sales"]]
 
 
-#veri on isleme
-aylar = veriler[['Aylar']]
 #test
-print(aylar)
-
-satislar = veriler[['Satislar']]
-print(satislar)
 
 
-#verilerin egitim ve test icin bolunmesi
-from sklearn.cross_validation import train_test_split
-x_train, x_test,y_train,y_test = train_test_split(aylar,satislar,test_size=0.33, random_state=0)
+#Split data as train and test
+from sklearn.model_selection import train_test_split
+x_train, x_test,y_train,y_test = train_test_split(months,sales,test_size=0.33, random_state=0)
 '''
-#verilerin olceklenmesi
+#Data scaling
 from sklearn.preprocessing import StandardScaler
-
 
 sc = StandardScaler()
 X_train = sc.fit_transform(x_train)
@@ -41,13 +38,13 @@ X_test = sc.fit_transform(x_test)
 Y_train = sc.fit_transform(y_train)
 Y_test = sc.fit_transform(y_test)
 '''
-# model inşası (linear regression)
+# build model (linear regression)
 from sklearn.linear_model import LinearRegression
 lr = LinearRegression()
 lr.fit(x_train,y_train)
 
-tahmin = lr.predict(x_test)
-
+prediction = lr.predict(x_test)
+print(prediction)
 
 
 
