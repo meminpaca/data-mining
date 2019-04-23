@@ -46,7 +46,16 @@ lr.fit(x_train,y_train)
 prediction = lr.predict(x_test)
 print(prediction)
 
+#Sort for sequential display on the chart
+x_train = x_train.sort_index()
+y_train = y_train.sort_index()
+plt.plot(x_train,y_train)
 
+plt.plot(x_test,prediction)
+plt.title("Monthly Sales")
+plt.xlabel("Months")
+plt.ylabel("Sales")
+plt.show()
 
 
 
