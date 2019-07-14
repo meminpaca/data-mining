@@ -11,7 +11,7 @@ from sklearn.preprocessing import Imputer
 # 2 - Data Preprocessing Steps
 
 # 2.1 - Load data set
-data = pd.read_csv('data/missing_values.csv')
+data = pd.read_csv('../../data/missing_values.csv')
 
 # 2.2 Fill Missing Values
 imputer = Imputer(missing_values="NaN",strategy="mean",axis=0)

@@ -9,7 +9,7 @@ from sklearn.preprocessing import Imputer
 
 #codes
 # load data set
-data = pd.read_csv('data/missing_values.csv')
+data = pd.read_csv('../../data/missing_values.csv')
 
 imputer = Imputer(missing_values="NaN",strategy="mean",axis=0)
 
