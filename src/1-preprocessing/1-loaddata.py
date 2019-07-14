@@ -8,7 +8,7 @@ import pandas as pd
 
 #codes
 # load data set
-data = pd.read_csv('data/sample_dataset.csv')
+data = pd.read_csv('../../data/sample_dataset.csv')
 
 print(data)
 

@@ -13,7 +13,7 @@ import pandas as pd
 #2. Data Pre-Processing
 
 #2.1. Data Loading
-data = pd.read_csv('data/sales_dataset.csv')
+data = pd.read_csv('../../data/sales_dataset.csv')
 
 #get only monht column
 months = data[["Month"]]
