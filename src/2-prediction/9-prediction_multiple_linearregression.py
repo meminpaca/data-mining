@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+
+
 from sklearn.preprocessing import Imputer
 
 # 2 - Data Preprocessing Steps
@@ -72,3 +74,18 @@ regressor2.fit(x_train,y_train)
 
 y_pred2 = regressor2.predict(x_test)
 
+
+import statsmodels.api as sm
+X = np.append(arr=np.ones((22,1)).astype(int),values=newData, axis=1)
+X_l = newData.iloc[:,[0,1,2,3,4,5]].values
+r_ols = sm.OLS(endog=heights, exog=X_l)
+r = r_ols.fit()
+print(r.summary())
+
+# Remove column 4 because P-Value = 0.717 > 0.05
+# [look previous summary-backward elimination requires removing big P values> SL]
+# if we use forward selection  we add P < SL columns one by one
+X_l = newData.iloc[:,[0,1,2,3,5]].values
+r_ols = sm.OLS(endog=heights, exog=X_l)
+r = r_ols.fit()
+print(r.summary())
