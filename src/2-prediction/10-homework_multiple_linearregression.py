@@ -1,43 +1,73 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-@author Mehmet Emin PACA
+Created on Thu Mar 15 04:18:20 2018
+
+@author: sadievrenseker
 """
 
-# 1 - Load Libraries
+#1. kutuphaneler
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+#2. Veri Onisleme
+
+#2.1. Veri Yukleme
+veriler = pd.read_csv('../../data/homework_tennis_playing_state.csv')
+#pd.read_csv("veriler.csv")
 
 
-from sklearn.preprocessing import Imputer
+#veri on isleme
 
-# 2 - Data Preprocessing Steps
-
-# 2.1 - Load data set
-data = pd.read_csv('../../data/homework_tennis_playing_state.csv')
-
-# 2.2 Encode Categorical Values -> Numerical Values
+#encoder:  Kategorik -> Numeric
 from sklearn.preprocessing import LabelEncoder
-le = LabelEncoder()
-outlook = data.iloc[:,0:1].values
-outlook[:,0] = le.fit_transform(outlook[:,0])
+veriler2 = veriler.apply(LabelEncoder().fit_transform)
 
+c = veriler2.iloc[:,:1]
 from sklearn.preprocessing import OneHotEncoder
-ohe = OneHotEncoder(categorical_features="all")
-outlook = ohe.fit_transform(outlook).toarray()
+ohe = OneHotEncoder(categorical_features='all')
+c=ohe.fit_transform(c).toarray()
+print(c)
+
+havadurumu = pd.DataFrame(data = c, index = range(14), columns=['o','r','s'])
+sonveriler = pd.concat([havadurumu,veriler.iloc[:,1:3]],axis = 1)
+sonveriler = pd.concat([veriler2.iloc[:,-2:],sonveriler], axis = 1)
 
 
-nwindies = data.iloc[:,3:4].values
-nwindies[:,0] = le.fit_transform(nwindies[:,0])
+#verilerin egitim ve test icin bolunmesi
+from sklearn.model_selection import train_test_split
+x_train, x_test,y_train,y_test = train_test_split(sonveriler.iloc[:,:-1],sonveriler.iloc[:,-1:],test_size=0.33, random_state=0)
+
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(x_train,y_train)
 
 
-states = data.iloc[:,-1:].values
-states[:,0] = le.fit_transform(states[:,0])
+y_pred = regressor.predict(x_test)
 
-# 2.3 Create Dataframes
-result = pd.DataFrame(data=outlook,index=range(14),columns=['Overcast','Rainy','Sunny'])
+print(y_pred)
+
+import statsmodels.api as sm
+X = np.append(arr = np.ones((14,1)).astype(int), values=sonveriler.iloc[:,:-1], axis=1 )
+X_l = sonveriler.iloc[:,[0,1,2,3,4,5]].values
+r_ols = sm.OLS(endog = sonveriler.iloc[:,-1:], exog =X_l)
+r = r_ols.fit()
+print(r.summary())
+
+sonveriler = sonveriler.iloc[:,1:]
+
+import statsmodels.api as sm
+X = np.append(arr = np.ones((14,1)).astype(int), values=sonveriler.iloc[:,:-1], axis=1 )
+X_l = sonveriler.iloc[:,[0,1,2,3,4]].values
+r_ols = sm.OLS(endog = sonveriler.iloc[:,-1:], exog =X_l)
+r = r_ols.fit()
+print(r.summary())
+
+x_train = x_train.iloc[:,1:]
+x_test = x_test.iloc[:,1:]
+
+regressor.fit(x_train,y_train)
 
 
-result2 = pd.DataFrame(data=data.iloc[:,1:3].values,index=range(14),columns=['Temperature','Humidity'])
-
-result3 = pd.DataFrame(data=nwindies[:,0],index=range(14),columns=['Windy'])
+y_pred = regressor.predict(x_test)
